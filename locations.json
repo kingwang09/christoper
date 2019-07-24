@@ -1,0 +1,16 @@
+{
+  "S1" : {
+    "lat" : 37.4457312,
+    "lon" : 127.1391439,
+    "img" : "https://geo0.ggpht.com/maps/photothumb/fd/v1?bpb=ChAKDnNlYXJjaC5UQUNUSUxFEiAKEgmXqQ4YvKh8NRGdgdowdMlLDCoKDbbDURYVTjrISxoGCPABEJgD&gl=KR",
+    "address": "경기도 성남시 수정구 태평동 7317-5"
+
+  },
+  "S2" : {
+    "lat": 35.1461454,
+    "lon": 129.0186813,
+    "img": "https://lh5.googleusercontent.com/p/AF1QipPaT2FWPoLeTiQD5wQ2THo7g4nd07cFz6M36AP7=w426-h240-k-no",
+    "address": "부산시 백병원"
+  }
+
+}

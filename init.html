@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>지도 생성하기</title>
+    <style>
+        .wrap {position: absolute;left: 0;bottom: 40px;width: 288px;height: 132px;margin-left: -144px;text-align: left;overflow: hidden;font-size: 12px;font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;line-height: 1.5;}
+        .wrap * {padding: 0;margin: 0;}
+        .wrap .info {width: 286px;height: 120px;border-radius: 5px;border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;overflow: hidden;background: #fff;}
+        .wrap .info:nth-child(1) {border: 0;box-shadow: 0px 1px 2px #888;}
+        .info .title {padding: 5px 0 0 10px;height: 30px;background: #eee;border-bottom: 1px solid #ddd;font-size: 18px;font-weight: bold;}
+        .info .close {position: absolute;top: 10px;right: 10px;color: #888;width: 17px;height: 17px;background: url('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/overlay_close.png');}
+        .info .close:hover {cursor: pointer;}
+        .info .body {position: relative;overflow: hidden;}
+        .info .desc {position: relative;margin: 13px 0 0 90px;height: 75px;}
+        .desc .ellipsis {overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
+        .desc .jibun {font-size: 11px;color: #888;margin-top: -2px;}
+        .info .img {position: absolute;top: 6px;left: 5px;width: 73px;height: 71px;border: 1px solid #ddd;color: #888;overflow: hidden;}
+        .info:after {content: '';position: absolute;margin-left: -12px;left: 50%;bottom: 0;width: 22px;height: 12px;background: url('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
+        .info .link {color: #5085BB;}
+    </style>
+</head>
+<body>
+<!-- 지도를 표시할 div 입니다 -->
+<div id="map" style="width:100%;"></div>
+
+<script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=dcbe919dde4bba6b6b7b299c7eda090d"></script>
+<script type="text/javascript" src="https://underscorejs.org/underscore-min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script>
+    var json = {
+        S1 : {
+            lat : 37.4457312,
+            lon : 127.1391439,
+            img : "https://geo0.ggpht.com/maps/photothumb/fd/v1?bpb=ChAKDnNlYXJjaC5UQUNUSUxFEiAKEgmXqQ4YvKh8NRGdgdowdMlLDCoKDbbDURYVTjrISxoGCPABEJgD&gl=KR",
+            address: "경기도 성남시 수정구 태평동 7317-5",
+            description: "교육관임"
+
+        },
+        S2 : {
+            lat: 35.1461454,
+            lon: 129.0186813,
+            img: "https://lh5.googleusercontent.com/p/AF1QipPaT2FWPoLeTiQD5wQ2THo7g4nd07cFz6M36AP7=w426-h240-k-no",
+            address: "부산시 백병원",
+            description: "본사임"
+        }
+
+    };
+
+    var overlay = new kakao.maps.CustomOverlay({});
+    var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+        mapOption = {
+            center: new kakao.maps.LatLng(37.5536, 126.9696), // 지도의 중심좌표
+            level: 13 // 지도의 확대 레벨
+        };
+
+    $(document).ready(function(){
+        $("#map").css("height",$(document).height()); //full size 처리
+        var map = new kakao.maps.Map(mapContainer, mapOption);//map 생성
+
+        var keyList = _.keys(json);
+        for(var i=0; i<keyList.length; i++){
+            var key = keyList[i];
+            var marker = new kakao.maps.Marker({
+                position: new kakao.maps.LatLng(json[key].lat, json[key].lon),
+                title: key
+            });
+            kakao.maps.event.addListener(marker, 'click', function() {
+                //custom window
+                var markerJson =  json[this.getTitle()];
+                overlay.setContent(getOverlayContent(markerJson));
+                overlay.setPosition(this.getPosition());
+                overlay.setMap(map);
+            });
+            marker.setMap(map);
+        }
+    });
+
+    /**
+     * Custom Overlay를 재사용하도록 변경 필요함.
+     * @param overlay
+     */
+
+    // 커스텀 오버레이를 닫기 위해 호출되는 함수입니다
+    function closeOverlay() {
+        overlay.setMap(null);
+    }
+
+    function getOverlayContent(markerJson){
+        var content = '<div class="wrap">' +
+            '    <div class="info">' +
+            '        <div class="title">' +
+            '            '+markerJson.title +
+            '            <div class="close" onclick="closeOverlay()" title="닫기"></div>' +
+            '        </div>' +
+            '        <div class="body">' +
+            '            <div class="img">' +
+            '                <img src="'+markerJson.img+'" width="73" height="70">' +
+            '           </div>' +
+            '            <div class="desc">' +
+            '                <div class="ellipsis">'+markerJson.address+'</div>' +
+            '                <div class="jibun ellipsis">'+markerJson.description+'</div>' +
+            '                <div>' +
+            '                   <a href="http://www.kakaocorp.com/main" target="_blank" class="link">로드뷰</a> '+
+            '                   <a href="http://www.kakaocorp.com/main" target="_blank" class="link">상세정보</a>' +
+            '                </div>' +
+            '            </div>' +
+            '        </div>' +
+            '    </div>' +
+            '</div>';
+        return content;
+    }
+
+</script>
+</body>
+</html>
