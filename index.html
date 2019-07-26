@@ -30,11 +30,12 @@
 <script>
     var json = {
         S1 : {
-            lat : 37.4457312,
-            lon : 127.1391439,
+            lat : 37.445795,
+            lon : 127.141333,
             img : "https://geo0.ggpht.com/maps/photothumb/fd/v1?bpb=ChAKDnNlYXJjaC5UQUNUSUxFEiAKEgmXqQ4YvKh8NRGdgdowdMlLDCoKDbbDURYVTjrISxoGCPABEJgD&gl=KR",
             address: "경기도 성남시 수정구 태평동 7317-5",
-            description: "교육관임"
+            description: "교육관임",
+            title: "진자기집"
 
         },
         S2 : {
@@ -42,7 +43,8 @@
             lon: 129.0186813,
             img: "https://lh5.googleusercontent.com/p/AF1QipPaT2FWPoLeTiQD5wQ2THo7g4nd07cFz6M36AP7=w426-h240-k-no",
             address: "부산시 백병원",
-            description: "본사임"
+            description: "본사임",
+            title: "지영이 일하는곳 근처"
         }
 
     };
@@ -101,8 +103,8 @@
             '                <div class="ellipsis">'+markerJson.address+'</div>' +
             '                <div class="jibun ellipsis">'+markerJson.description+'</div>' +
             '                <div>' +
-            '                   <a href="http://www.kakaocorp.com/main" target="_blank" class="link">로드뷰</a> '+
-            '                   <a href="http://www.kakaocorp.com/main" target="_blank" class="link">상세정보</a>' +
+            '                   <a href="./roadView.php?lat='+markerJson.lat+'&lon='+markerJson.lon+'" target="_blank" class="link">로드뷰</a> '+
+            //'                   <a href="http://www.kakaocorp.com/main" target="_blank" class="link">상세정보</a>' +
             '                </div>' +
             '            </div>' +
             '        </div>' +
