@@ -1,16 +1,7 @@
-{
-  "S1" : {
-    "lat" : 37.4457312,
-    "lon" : 127.1391439,
-    "img" : "https://geo0.ggpht.com/maps/photothumb/fd/v1?bpb=ChAKDnNlYXJjaC5UQUNUSUxFEiAKEgmXqQ4YvKh8NRGdgdowdMlLDCoKDbbDURYVTjrISxoGCPABEJgD&gl=KR",
-    "address": "경기도 성남시 수정구 태평동 7317-5"
-
-  },
-  "S2" : {
-    "lat": 35.1461454,
-    "lon": 129.0186813,
-    "img": "https://lh5.googleusercontent.com/p/AF1QipPaT2FWPoLeTiQD5wQ2THo7g4nd07cFz6M36AP7=w426-h240-k-no",
-    "address": "부산시 백병원"
-  }
-
-}
+[
+  {"category" :"1본부", "name": "안드레지파", "displayAddress": "동구 범일로 11 안드레연수원"},
+  {"category" :"1본부", "name": "야고보지파", "displayAddress": "사하구 하신번영로 261번길 17 (활어센터 옆)"},
+  {"category" :"2위장교회", "name": "맑은샘 교회", "displayAddress": "부산진구 부전로 101 HY원룸 2층 (서면성당 옆)"},
+  {"category" :"2위장교회", "name": "기장교회", "displayAddress": "기장군 기장읍 차성로 441번길 15 4층 (기장복싱체육관, SM휘트니스 건물)"},
+  {"category" :"2위장교회", "name": "정관비전센터", "displayAddress": "기장군 정관읍 구연로 5 2층(킹 노래방 건물)"}
+]

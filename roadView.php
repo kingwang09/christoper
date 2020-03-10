@@ -9,7 +9,7 @@
 <!-- 로드뷰를 표시할 div 입니다 -->
 <div id="roadview" style="width:100%;height:300px;"></div>
 
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=dcbe919dde4bba6b6b7b299c7eda090d"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey={apiKey}"></script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script>
     $(document).ready(function() {

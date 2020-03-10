@@ -19,63 +19,117 @@
         .info:after {content: '';position: absolute;margin-left: -12px;left: 50%;bottom: 0;width: 22px;height: 12px;background: url('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
         .info .link {color: #5085BB;}
     </style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
 <body>
-<!-- 지도를 표시할 div 입니다 -->
-<div id="map" style="width:100%;"></div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-8">
+            <div id="map"></div>
+        </div>
+        <div id="list" class="col-4" style="overflow-y: scroll">
 
-<script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=dcbe919dde4bba6b6b7b299c7eda090d"></script>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey={apiKey}&libraries=services"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 <script type="text/javascript" src="https://underscorejs.org/underscore-min.js"></script>
-<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script>
-    var json = {
-        S1 : {
-            lat : 37.445795,
-            lon : 127.141333,
-            img : "https://geo0.ggpht.com/maps/photothumb/fd/v1?bpb=ChAKDnNlYXJjaC5UQUNUSUxFEiAKEgmXqQ4YvKh8NRGdgdowdMlLDCoKDbbDURYVTjrISxoGCPABEJgD&gl=KR",
-            address: "경기도 성남시 수정구 태평동 7317-5",
-            description: "교육관임",
-            title: "진자기집"
+    var list = [
+        {"category" :"1본부", "name": "안드레지파", "address": "동구 범일로 11", "description":"안드레연수원", "img": "https://lh3.google.com/u/0/d/1joPSMERXg1kDnk1eTfOnkrCANC8gtc8f=w3360-h1722-iv1", "lat":"35.1308056279894", "lon":"129.059264779428"},
+        {"category" :"1본부", "name": "야고보지파", "address": "사하구 하신번영로 261번길 17", "description":"(활어센터 옆)", "img": "https://lh3.google.com/u/0/d/1a8oePcTGopoW0eg7uJMci7o649Bnm_N6=w3360-h1036-iv1","lat":"35.104115382255", "lon":"128.957250560169"},
+        {"category" :"2위장교회", "name": "맑은샘 교회", "address": "부산진구 부전로 101" , "description":"HY원룸 2층 (서면성당 옆)", "img": "https://lh3.google.com/u/0/d/10X-4xtgXTEGSVmB0zuONiHpn4T_ixB-4=w3360-h1722-iv1","lat":"35.1591553372584", "lon":"129.054500591388"},
+        {"category" :"2위장교회", "name": "기장교회", "address": "기장군 기장읍 차성로 441번길 15" , "description":"4층 (기장복싱체육관, SM휘트니스 건물)", "img": "https://lh3.google.com/u/0/d/1_r0LPXCYyT2VOAFkmD1IpZBtkVciib4l=w3360-h1036-iv1","lat":"35.2556117087514", "lon":"129.216705937825"},
+        {"category" :"2위장교회", "name": "정관비전센터", "address": "기장군 정관읍 구연로 5", "description":" 2층(킹 노래방 건물)", "img": "https://lh3.google.com/u/0/d/1U4OmAiK37fcW30wtI6OVKSGdiRyKYpSD=w3360-h1036-iv1","lat":"35.3222155549771", "lon":"129.180204534901"},
+        {"category" :"3모임방", "name": "글로벌 비전센터", "address": "금정구 금강로 231", "description":"3층 (제트죤빌딩)", "img": "https://lh3.google.com/u/0/d/1T5Q_JjT14CYQePB6CdoTDXQWtj-fQjyr=w3360-h1036-iv1","lat":"35.2288138493233", "lon":"129.084085433911"},
+        {"category" :"3모임방", "name": "모임방", "address": "부산진구 범일로 131번길 47", "description":" 3층 (국제산업직업전문학교 건물)", "img": "https://lh3.google.com/u/0/d/1K1OPWVGbWM_77ps49BEEF0UB48qeuGTr=w3360-h1036-iv1","lat":"35.1433608884269", "lon":"129.058540816825"},
+        {"category" :"3모임방", "name": "호시절", "address": "부산진구 범일로 190", "description":" 도문빌딩 3층 (1층 하나투어 건물)", "img": "https://lh3.google.com/u/0/d/1DXl1WqM9A9ogH5doBh9O2eNXBKkjR9yS=w3360-h1036-iv1","lat":"35.1469524170011", "lon":"129.059959619449"},
+        {"category" :"3모임방", "name": "안드레 모임방", "address": "수영구 수영로 610번길 25", "description":"(광안 새시장)", "img": "https://lh3.google.com/u/0/d/1TEvA3AjyT2YvA_ETrQvBx_dY1EFNoI6K=w3360-h1036-iv1","lat":"35.1603474058623", "lon":"129.115079871711"},
+        {"category" :"4센터new", "name": "기장센터", "address": "기장군 기장읍 차성로 436번길 19", "description":"3-4층 (교리차고지 옆 자연인카페 건물)", "img": "https://lh3.google.com/u/0/d/1RS4BVxpE-v1Gu_tR6b-J5QAlso5LyxOM=w3360-h1036-iv1","lat":"35.254335317803", "lon":"129.220294900452"},
 
-        },
-        S2 : {
-            lat: 35.1461454,
-            lon: 129.0186813,
-            img: "https://lh5.googleusercontent.com/p/AF1QipPaT2FWPoLeTiQD5wQ2THo7g4nd07cFz6M36AP7=w426-h240-k-no",
-            address: "부산시 백병원",
-            description: "본사임",
-            title: "지영이 일하는곳 근처"
-        }
 
-    };
+        {"category" :"4센터new", "name": "정관센터", "address": "기장군 정관읍 정관로 387", "description":" 누리타워 8층", "img": "https://lh3.google.com/u/0/d/19ndSJ0JuQksPa0pzuExsbNOurwWiS9zp=w3360-h1036-iv1","lat":"35.3348485610867", "lon":"129.165638147433"},
+        {"category" :"4센터new", "name": "다문화센터", "address": "남구 용소로 48", "description":" 2-3층 (부경대 맞은 편 대학사진관 건물)", "img": "https://lh3.google.com/u/0/d/1ccOeBmU-DgZPZBu7rdcK4plEwE9klphe=w3360-h1036-iv1","lat":"35.1330037786707", "lon":"129.100918352033"},
+        {"category" :"4센터", "name": "초량센터", "address": "동구 중앙대로 286번길 3-7", "description":" 2-3층 (초량역 12번 출구 안쪽 골목, 1층 멸치쌈밥 건물)", "img": "https://lh3.google.com/u/0/d/1OEubrOZGkwJpO9IGceRiXorta_48zJ_S=w3360-h1036-iv1","lat":"35.122382178505", "lon":"129.044192728594"},
+        {"category" :"4센터new", "name": "하나아카데미", "address": "동래구 명륜로 82", "description":" 3층 (국민연금 건물)", "img": "https://lh3.google.com/u/0/d/1_H6nd_3HVHkbZX4US7IfWa-ZgI6r5VQ1=w3360-h1036-iv1","lat":"35.2012389492135", "lon":"129.084377234496"},
+        {"category" :"4센터new", "name": "교대센터", "address": "동래구 중앙대로 1261", "description":" 한양빌딩 4층 (연치과의원 건물)", "img": "https://lh3.google.com/u/0/d/1pyADGWJZZ4vXojBla34KhZdk0aqmXaJ-=w3360-h1036-iv1","lat":"35.1996231579415", "lon":"129.077522612001"},
+        {"category" :"4센터", "name": "양정센터", "address": "부산진구 거제대로 16-8", "description":" 동진빌딩 3층 (애견골목)", "img": "https://lh3.google.com/u/0/d/1NghSoZRNF84ZvIQbZq1ZwP8LAoislwfl=w3360-h1036-iv1","lat":"35.1699579979126", "lon":"129.067943083608"},
+        {"category" :"4센터", "name": "전포센터", "address": "부산진구 동천로 108번길 11", "description":"창원빌딩 2층 (1층 피자샾 건물)", "img": "https://lh3.google.com/u/0/d/1Qmbkjq2R1tRzhUQlnp1JNYw1ZHRBM8Cg=w3360-h1036-iv1","lat":"35.1584975140978", "lon":"129.063165868686"},
+        {"category" :"4센터", "name": "재능기부행복나눔센터", "address": "부산진구 동천로 112", "description":" 행림빌딩 4층 (1층 축산두배로마트 건물)", "img": "https://lh3.google.com/u/0/d/1zClXKWKjCW_1ycLqDtJADaAzftrfhwmq=w3360-h1036-iv1","lat":"35.158592615266", "lon":"129.062571662127"},
+        {"category" :"4센터new", "name": "범일센터", "address": "부산진구 범일로 170", "description":" 3-4층(범내골 2번 출구, 1층 봉평대가 건물)", "img": "https://lh3.google.com/u/0/d/1NFWh-ECLtAKFdn2wHvy7C4HPdK2Y74py=w3360-h1036-iv1","lat":"35.1452770589859", "lon":"129.059599546155"},
+        {"category" :"4센터", "name": "진경찰서센터/어깨동무", "address": "부산진구 부전로 111번길 14", "description":" 청풍빌딩 2-3층 문화인력개발센터 (부산진경찰서 옆 1층 CU편의점 건물)", "img": "https://lh3.google.com/u/0/d/1tOdrvMPntazzapxz8IGuWEidwnWp7DRw=w3360-h1036-iv1","lat":"35.1600037596605", "lon":"129.053954721581"},
 
+
+        {"category" :"4센터", "name": "피스아카데미센터", "address": "부산진구 부전로 94", "description":"영동프라자 3층 (롯데호텔 맞은편, 2층 부산진여성인력개발센터 건물)", "img": "https://lh3.google.com/u/0/d/1W8bZ3LB_5BH4Af-A2w7ugb4ETpuBt2dd=w3360-h1036-iv1","lat":"35.1584911561607", "lon":"129.055001267777"},
+        {"category" :"4센터", "name": "새천지센터", "address": "부산진구 서면문화로 33", "description":" 유성빌딩 5층 (1층 부산해물탕 건물)", "img": "https://lh3.google.com/u/0/d/1Gvbd6Jq18Po0vuORKIJ0sJKBGF57Gu-A=w3360-h1036-iv1","lat":"35.1599962945054", "lon":"129.055584402949"},
+        {"category" :"4센터", "name": "부암센터", "address": "부산진구 신천대로 167", "description":" 탑패밀리 2층 (부암역 탑패밀리 APT 탑마트 건물)", "img": "https://lh3.google.com/u/0/d/1zNH0-55TktHUb6E4lhMW8jtDC9-ERRrc=w3360-h1036-iv1","lat":"35.1567882730123", "lon":"129.050388978186"},
+        {"category" :"4센터new", "name": "양정센터/선교교회", "address": "부산진구 중앙대로 962", "description":" 진빌딩 4-5층 (1층 탐앤탐스 건물)", "img": "https://lh3.google.com/u/0/d/1QYHfpkT6AQ2dnfiliEtAnQL8Xn4jT4Z-=w3360-h1036-iv1","lat":"35.1752981756481", "lon":"129.073465177429"},
+        {"category" :"4센터new", "name": "덕천센터", "address": "북구 만덕대로 104", "description":" 6-7층 아름드리문화센터 (숙등역 1번 출구, 1층 미스터피자 건물)", "img": "https://lh3.google.com/u/0/d/1Enk9kxfoIbDkVfz8RqAVBbNGgvaei33m=w3360-h1036-iv1","lat":"35.2126104798542", "lon":"129.016167332253"},
+        //{"category" :"4센터new", "name": "컬쳐센터", "address": "사하구 낙동대로 542", "description":" 대우에덴프라자 1층 (오른쪽 복도 끝)", "img": ""},
+        {"category" :"4센터", "name": "연산센터", "address": "연제구 월드컵대로 99번길 38", "description":" 3-4층 (연산역 2번 출구, 1층 CU편의점 건물)", "img": "https://lh3.google.com/u/0/d/1o3TriWL9ttNLxRTFROZ6M-Z0pl4-ZlAo=w3360-h1036-iv1","lat":"35.1841852577321", "lon":"129.081218903422"},
+        {"category" :"4센터", "name": "사랑아카데미센터", "address": "연제구 중앙대로 1086", "description":" 4층 (연산역 2번 출구, 1층 올리브영 건물)", "img": "https://lh3.google.com/u/0/d/1G08ScTakG4s3L7sJdkTlLDYdmz_2c5zj=w3360-h1036-iv1","lat":"35.1845842133149", "lon":"129.080882548376"},
+        {"category" :"4센터new", "name": "중동센터", "address": "해운대구 좌동순환로 11", "description":" 2층 한울아카데미 (1층 CU편의점 건물)", "img": "https://lh3.google.com/u/0/d/1_f_PTPJROm3jGBzZIMcormAFDzkWN0js=w3360-h1036-iv1","lat":"35.1675099490536", "lon":"129.166986072871"},
+        {"category" :"4위장문화센터", "name": "가람문화센터", "address": "남구 수영로 200", "description":" 3층 (1층 롯데리아 건물)", "img": "https://lh3.google.com/u/0/d/17zzJA8CnM0dCOp5zPmeEYAA9dl2AvsJ6=w3360-h1036-iv1","lat":"35.1346979563904", "lon":"129.088436640504"},
+
+
+        {"category" :"4위장문화센터", "name": "배움의 터", "address": "부산진구 부전로 75-5", "description":" 2층 (롯데호텔 후문, 3층 Fire 기술학원 건물)", "img": "https://lh3.google.com/u/0/d/1eZaj3GX7UU1ABytVX-R_gWwsPoXSqYcn=w3360-h1036-iv1","lat":"35.1566259071973", "lon":"129.054296077669"},
+        {"category" :"4위장문화센터", "name": "행복포럼", "address": "부산진구 전포동 전포대로 230-1", "description":" 3층 (1층 현대모비스 건물)", "img": "https://lh3.google.com/u/0/d/12ufU7oUtXpYqw2UGC3BKjZENEa0Q0FMy=w3360-h1036-iv1","lat":"35.1571647950907", "lon":"129.065692299682"},
+        {"category" :"4위장문화센터new", "name": "리더스 아카데미", "address": "부산진구 중앙대로 960-1", "description":" 3층 (1층 오색비단 건물)", "img": "https://lh3.google.com/u/0/d/1GFkt5pm079xe_bzMwozU15wP0zQjo_be=w3360-h1036-iv1","lat":"35.1751863057678", "lon":"129.073283108535"},
+        {"category" :"4위장문화센터new", "name": "나눔문화센터", "address": "연제구 거제천로 230번길 61", "description":" 3층 (1층 무지개 스토아 건물)", "img": "https://lh3.google.com/u/0/d/145gBwAAMh5Jf6m2WW0has7sYIOQNtwPO=w3360-h1036-iv1","lat":"35.1892395410331", "lon":"129.082797261223"},
+        {"category" :"5복음방", "name": "윈즈", "address": "금정구 금정로 89", "description":" 2층 (1층 C's in the room 건물)", "img": "https://lh3.google.com/u/0/d/1EZERbxIl9eAPdLf6Wd1Aj5RPYC5rYyW8=w3360-h1036-iv1","lat":"35.2326044867119", "lon":"129.086665465852"},
+        {"category" :"5복음방", "name": "스터디룸 채움", "address": "기장군 정관읍 산단4로 159", "description":" 2층 (정관신도시 LH 4단지 맞은편)", "img": "https://lh3.google.com/u/0/d/1Xwb8avjJ7_MYTOWMlWP9LQx1M0s1J1g7=w3360-h1036-iv1","lat":"35.3207296289565", "lon":"129.191160570293"},
+        {"category" :"5복음방", "name": "서면쉼터", "address": "부산진구 새싹로 28번길 27", "description":" 3층 (원할인마트 건물)", "img": "https://lh3.google.com/u/0/d/1Ry12Y28yDmu5063IxtalScPMcEKzpOo2=w3360-h1036-iv1","lat":"35.1606107893827", "lon":"129.058571687871"},
+        {"category" :"5복음방", "name": "모임톡", "address": "부산진구 서전로 37번길 25-9", "description":" 예일프라자 3층 (지하 구구롤러스케이트 건물)", "img": "https://lh3.google.com/u/0/d/1jimzU5IYIcc-wqE6M-JWliO2up0TyxQF=w3360-h1036-iv1","lat":"35.1588355614929", "lon":"129.06322806651"},
+        {"category" :"5복음방", "name": "더타임", "address": "부산진구 신천대로 50번길 70", "description":" 4층(3층 천사네일 건물)", "img": "https://lh3.google.com/u/0/d/1QtNKlIMbX0VI72BqhPqOcrmVwRhZkJEq=w3360-h1036-iv1","lat":"35.1538887502528", "lon":"129.060034333421"},
+        {"category" :"5복음방new", "name": "채움", "address": "사하구 낙동대로 391-1", "description":" 2층 (1층 BYC 매장 건물)", "img": "https://lh3.google.com/u/0/d/1bAHaZkdfzE-_bP6CHvTlBVPMYoHZu4aC=w3360-h1036-iv1","lat":"35.1028514935193", "lon":"128.97515170925"},
+
+        {"category" :"5복음방", "name": "광안복음방", "address": "수영구 수영로 600", "description":" 3층 (광안역 1번 출구, 원창한의원 건물)", "img": "https://lh3.google.com/u/0/d/19r3dX86I1hyQG-EfGDQGJHW2TlpDC6Rg=w3360-h1036-iv1","lat":"35.1591480500409", "lon":"129.113738736258"},
+        {"category" :"6양산 지교회", "name": "양산지교회", "address": "경남 양산시 물금읍 서들8길 1", "description":" DS프라자 4, 5층", "img": "https://lh3.google.com/u/0/d/17E4m9owCwxEE8JdCxOTbvx1jKr08msDD=w3360-h1036-iv1","lat":"35.3098038944037", "lon":"129.004574987003"},
+        {"category" :"6양산 센터", "name": "양산센터", "address": "경남 양산시 삼일로 82", "description":" 3층 (2층 해성당구클럽 건물)", "img": "https://lh3.google.com/u/0/d/1tB29xYUShv-1bQb0gZMGrIT7ulPrB8vv=w3360-h1036-iv1","lat":"35.3437611666779", "lon":"129.036294524121"},
+        {"category" :"7김해 지교회", "name": "김해교회", "address": "김해시 번화1로 44번길 12", "description":" 위드3빌딩 6-7층 하늘문화교육관", "img": "https://lh3.google.com/u/0/d/1PehIdUN6yU2rCqsRBQKlnNBgEhkcY9gK=w3360-h1036-iv1","lat":"35.1911852719691", "lon":"128.802026049648"},
+        {"category" :"7김해위장문화센터new", "name": "마루문화센터", "address": "김해시 함박로 119번길 23", "description":" 힐튼빌딩 7층", "img": "https://lh3.google.com/u/0/d/1v2Bp_u1JPUs--zzcldNGGHlkxmM3Sxgx=w3360-h1036-iv1","lat":"35.234081525968", "lon":"128.867330017953"},
+        {"category" :"7김해 복음방", "name": "윙스터디룸(WS)", "address": "김해시 우암로 100", "description":" 2층 (1층 BYC 매장 건물)", "img": "https://lh3.google.com/u/0/d/12JJT6GY7If_mbybuwmEXTTrxdsQbCqC7=w3360-h1036-iv1","lat":"35.2388575800929", "lon":"128.863118813943"},
+        {"category" :"7김해 복음방", "name": "복음방", "address": "김해시 가락로 37번길 5", "description":" 2층 (협동관 건물)", "img": "https://lh3.google.com/u/0/d/1sGrPeMZ1HgFew2caiATtT9UAaR0VbXU_=w3360-h1036-iv1","lat":"35.2296038063597", "lon":"128.881634806721"},
+    ];
+    var markerMap = {};
+    var geocoder = new kakao.maps.services.Geocoder();
+    var mapTypeControl = new kakao.maps.MapTypeControl();
+    var zoomControl = new kakao.maps.ZoomControl();
     var overlay = new kakao.maps.CustomOverlay({});
     var mapContainer = document.getElementById('map'), // 지도를 표시할 div
         mapOption = {
-            center: new kakao.maps.LatLng(37.5536, 126.9696), // 지도의 중심좌표
-            level: 13 // 지도의 확대 레벨
+            center: new kakao.maps.LatLng(35.179783, 129.074998), // 지도의 중심좌표
+            level: 10 // 지도의 확대 레벨
         };
-
+    var map;
     $(document).ready(function(){
         $("#map").css("height",$(document).height()); //full size 처리
-        var map = new kakao.maps.Map(mapContainer, mapOption);//map 생성
+        $("#list").css("height",$(document).height()); //full size 처리
+        map = new kakao.maps.Map(mapContainer, mapOption);//map 생성
+        map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
+        map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 
-        var keyList = _.keys(json);
-        for(var i=0; i<keyList.length; i++){
-            var key = keyList[i];
-            var marker = new kakao.maps.Marker({
-                position: new kakao.maps.LatLng(json[key].lat, json[key].lon),
-                title: key
-            });
-            kakao.maps.event.addListener(marker, 'click', function() {
-                //custom window
-                var markerJson =  json[this.getTitle()];
-                overlay.setContent(getOverlayContent(markerJson));
-                overlay.setPosition(this.getPosition());
-                overlay.setMap(map);
-            });
-            marker.setMap(map);
+        //initializer
+        for(var i=0; i<list.length; i++){
+            makeViewList(i, list[i]);
+            makeMark(i, list[i]);
         }
+
+        $("a.addressSearch").on("click",function(){
+           var index = $(this).attr("index");
+           var json = list[index];
+            overlay.setContent(getOverlayContent(json));
+            overlay.setPosition(markerMap[index].getPosition());
+            overlay.setMap(map);
+        });
+
+        $("img.preview").on("click", function(){
+            var imgSourceUrl = $(this).attr("src");
+            window.open(imgSourceUrl);
+        });
     });
 
     /**
@@ -88,22 +142,22 @@
         overlay.setMap(null);
     }
 
-    function getOverlayContent(markerJson){
+    function getOverlayContent(json){
         var content = '<div class="wrap">' +
             '    <div class="info">' +
             '        <div class="title">' +
-            '            '+markerJson.title +
+            '            '+json.category + ' ' + json.name+
             '            <div class="close" onclick="closeOverlay()" title="닫기"></div>' +
             '        </div>' +
             '        <div class="body">' +
             '            <div class="img">' +
-            '                <img src="'+markerJson.img+'" width="73" height="70">' +
+            '                <img src="'+json.img+'" width="73" height="70">' +
             '           </div>' +
             '            <div class="desc">' +
-            '                <div class="ellipsis">'+markerJson.address+'</div>' +
-            '                <div class="jibun ellipsis">'+markerJson.description+'</div>' +
+            '                <div class="ellipsis">'+json.address+'</div>' +
+            '                <div class="jibun ellipsis">'+json.description+'</div>' +
             '                <div>' +
-            '                   <a href="./roadView.php?lat='+markerJson.lat+'&lon='+markerJson.lon+'" target="_blank" class="link">로드뷰</a> '+
+            '                   <a href="./roadView.php?lat='+json.lat+'&lon='+json.lon+'" target="_blank" class="link">로드뷰 보기</a> '+
             //'                   <a href="http://www.kakaocorp.com/main" target="_blank" class="link">상세정보</a>' +
             '                </div>' +
             '            </div>' +
@@ -113,6 +167,51 @@
         return content;
     }
 
+    function makeViewList(index, json){
+        $("#list").append(makeView(index, json));
+    }
+
+    function makeView(index, json){
+        var content = '<div class="media">' +
+            '       <img src="' + json.img + '" width="100" height="100" class="rounded mr-3 preview" style="cursor: pointer"/>' +
+            '       <div class="media-body">' +
+            '            <h6 class="mt-0">'+json.category+' '+json.name+'</h6>'+
+            '            <a href="#" class="addressSearch" index="'+index+'">'+json.address +' '+json.description+'</a>'+
+            '        </div>' +
+            //'                   <a href="./roadView.php?lat='+lat+'&lon='+lon+'" target="_blank" class="link">로드뷰</a> '+
+            //'                   <a href="http://www.kakaocorp.com/main" target="_blank" class="link">상세정보</a>' +
+            '</div>';
+        return content;
+    }
+
+    // function searchAddress(address){
+    //     geocoder.addressSearch(address, function(result, status) {
+    //         // 정상적으로 검색이 완료됐으면
+    //         if (status === kakao.maps.services.Status.OK) {
+    //             var lat = result[0].y;
+    //             var lon = result[0].x;
+    //             console.log("lat: "+lat+", lon:"+lon);
+    //         }
+    //     });
+    // }
+
+    function makeMark(index, json){
+        var coords = new kakao.maps.LatLng(json.lat, json.lon);
+        // 결과값으로 받은 위치를 마커로 표시합니다
+        var marker = new kakao.maps.Marker({
+            map: map,
+            position: coords,
+            title: json["category"]+" "+json["name"]
+        });
+
+        kakao.maps.event.addListener(marker, 'click', function() {
+            overlay.setContent(getOverlayContent(json));
+            overlay.setPosition(this.getPosition());
+            overlay.setMap(map);
+        });
+        marker.setMap(map);
+        markerMap[index] = marker;
+    }
 </script>
 </body>
 </html>
